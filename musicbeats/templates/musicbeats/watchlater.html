@@ -1,0 +1,39 @@
+{% extends 'base.html' %}{% load static %}{% block title %}Queue{% endblock title %}{% block body %}
+<div class="container py-5">
+    {% if song %}
+    <div class="row py-2">
+        {% for i in song %}
+        <div class="col-sm-4 mt-4">
+            <div class="card">
+                <img class="card-img-top" src="/media/{{i.image}}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title" style="color: green;font-weight: 500;">{{i.name}}</h5>
+                    <a href="/musicbeats/songs/{{i.song_id}}"> <button class="btn btn-outline-danger btn-sm">Listen</button></a>
+                    <a href="#" class="btn btn-outline-warning btn-sm mx-1 remove-song" pid={{i.song_id}}>Remove</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <h2 class="text-center"> No songs added in Queue</h2>
+    {% endif %}
+</div>
+<script>
+    $('.remove-song').click(function(e) {
+        e.preventDefault();
+        var video_id = $(this).attr("pid").toString();
+        var eml = this
+        $.ajax({
+            type: "GET",
+            url: "/musicbeats/removequeue",
+            data: {
+                video_id: video_id
+            },
+            success: function(data) {
+                eml.parentNode.parentNode.parentNode.remove()
+            }
+        })
+    })
+</script>
+{% endblock body %}

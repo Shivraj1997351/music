@@ -1,0 +1,123 @@
+{% extends 'base.html' %}{% load static %}{% block title %}{{song.name}}{% endblock title %}{% block body %}
+<style>
+    @media (min-width: 250px) and (max-width: 767px) {
+        .img {
+            width: 100%;
+            height: 50vw;
+            object-fit: cover;
+        }
+    }
+    
+    @media(min-width: 768px) and (max-width: 1023px) {
+        .img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+        }
+    }
+    
+    @media(min-width: 1024px) {
+        .img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+    }
+</style>
+<div class="container py-5">
+    <div class="row">
+        <div class="col-sm-6 px-0">
+            <img src="/media/{{song.image}}" class="img" alt="">
+        </div>
+        <div class="col-sm-6">
+            <div class="card-body">
+                <h1 class="card-title" style="color: green;font-weight: 500;">{{song.name}}</h1>
+                <h6 class="card-text"><span style="color:hotpink;">Singer:</span> {{song.singer}}</h6>
+                <h6 class="card-text" style="margin-top: 15px;"><span style="color:indigo;">Movie:</span> {{song.movie}}</h6><br>
+                <audio class="audio" controls loop id="audio" preload="auto">
+                <source src="/media/{{song.song}}" >
+                </audio> {% if user.is_authenticated %}
+                <hr> {% if not watch %}
+                <a href="#" class="btn btn-outline-danger add-watch" pid={{song.song_id}}>Add to queue</a>
+                <a href="/musicbeats/watchlater" class="btn btn-outline-warning view-watch" style="visibility:hidden;">View in queue</a> {% else %}
+                <a href="/musicbeats/watchlater" class="btn btn-outline-warning">View in queue</a> {% endif %} {% endif %} <br><br>
+                <div class="form-inline">
+                    <button class="btn btn-light mx-1" onclick="playsong()" title="play"><i class="fas fa-play"></i></button>
+                    <button class="btn btn-light mx-1" onclick="forwardAudio()" title="skip 5 seconds"><i class="fas fa-forward"></i></button>
+                    <button class="btn btn-light mx-1" onclick="backwardAudio()" title="5 seconds back"><i class="fas fa-backward"></i></button>
+                    <button class="btn btn-light mx-1" onclick="pausesong()" title="pause"><i class="fas fa-pause"></i></button> {% if user.is_authenticated %}
+                    <form method="GET" id="form" action="/like" class="mx-1">
+                        <input type="hidden" name="value" value="{{song.song_id}}"> {% if like_status == 'like' %}
+                        <button type="submit" class="btn btn-light"><i id="likeicon"  class="far fa-heart"></i></button> {% else %}
+                        <button type="submit" class="btn btn-light"><i id="likeicon"  style="color:red;" class="fas fa-heart"></i></button> {% endif %}
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.add-watch').click(function(e) {
+        e.preventDefault();
+        var video_id = $(this).attr("pid").toString();
+        var eml = this
+        $.ajax({
+            type: "GET",
+            url: "/musicbeats/addwatchlater",
+            data: {
+                video_id: video_id
+            },
+            success: function(data) {
+                swal(data.message, {
+                    icon: "success"
+                })
+                eml.remove()
+                $('.view-watch').css('visibility', 'visible')
+            }
+        })
+    })
+
+
+    $('#form').submit(function(e) {
+        e.preventDefault();
+        var form = $(this);
+        var url = form.attr('action');
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: form.serialize(),
+            success: function(data) {
+                swal(data.message, {
+                    icon: "success"
+                })
+                $('#likeicon').attr('class', data.fmsg);
+                $('#likeicon').css('color', data.css);
+            }
+        })
+    })
+</script>
+<script>
+    function pausesong() {
+        var player = document.getElementById('audio');
+        player.pause();
+    }
+
+    function playsong() {
+        var player = document.getElementById('audio');
+        player.play();
+    }
+
+    function forwardAudio() {
+        var player = document.getElementById('audio');
+        player.currentTime += 5.0;
+
+    }
+
+    function backwardAudio() {
+        var player = document.getElementById('audio');
+        player.currentTime -= 5.0;
+
+    }
+</script>
+{% endblock body %}

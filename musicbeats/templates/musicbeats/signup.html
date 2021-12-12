@@ -1,0 +1,121 @@
+{% extends 'base.html' %}{% load static %}{% block title %}Signup{% endblock title %}{% block body %}
+<style>
+    @media (min-width: 250px) and (max-width: 320px) {
+        .loginform {
+            margin: auto;
+            background-color: #17a2b8;
+            height: 100vh;
+        }
+        #login .container #login-row #login-column #login-box {
+            margin-top: 35%;
+            height: auto;
+            border: 1px solid #9C9C9C;
+            background-color: #EAEAEA;
+        }
+        #login .container #login-row #login-column #login-box #login-form {
+            padding: 20px;
+        }
+        #acount {
+            font-size: 10px;
+        }
+    }
+    
+    @media (min-width: 321px) and (max-width: 767px) {
+        .loginform {
+            margin: auto;
+            background-color: #17a2b8;
+            height: 100vh;
+        }
+        #login .container #login-row #login-column #login-box {
+            margin-top: 35%;
+            height: auto;
+            border: 1px solid #9C9C9C;
+            background-color: #EAEAEA;
+        }
+        #login .container #login-row #login-column #login-box #login-form {
+            padding: 20px;
+        }
+        #acount {
+            font-size: 15px;
+        }
+    }
+    
+    @media (min-width: 768px) and (max-width: 1023px) {
+        .loginform {
+            margin: auto;
+            background-color: #17a2b8;
+            height: 100vh;
+        }
+        #login .container #login-row #login-column #login-box {
+            margin-top: 25%;
+            height: auto;
+            border: 1px solid #9C9C9C;
+            background-color: #EAEAEA;
+        }
+        #login .container #login-row #login-column #login-box #login-form {
+            padding: 20px;
+        }
+        #acount {
+            font-size: 15px;
+        }
+    }
+    
+    @media (min-width: 1024px) {
+        .loginform {
+            margin: auto;
+            background-color: #17a2b8;
+            height: 100vh;
+        }
+        #login .container #login-row #login-column #login-box {
+            margin-top: 10%;
+            height: auto;
+            border: 1px solid #9C9C9C;
+            background-color: #EAEAEA;
+        }
+        #login .container #login-row #login-column #login-box #login-form {
+            padding: 20px;
+        }
+        #acount {
+            font-size: 15px;
+        }
+    }
+</style>
+
+
+
+<div class="loginform">
+    <div id="login">
+        <div class="container">
+            <div id="login-row" class="row justify-content-center align-items-center">
+                <div id="login-column" class="col-md-6">
+                    <div id="login-box" class="col-md-12">
+                        <form id="login-form" class="form" action="/musicbeats/signuppage" method="POST">{% csrf_token %}
+                            <h3 class="text-center text-info">Signup</h3>
+                            <div class="form-group ">
+                                <label for="username ">Username</label>
+                                <input type="text " class="form-control " id="username" name="username" placeholder="Choose a unique username " required>
+                            </div>
+                            <div class="form-group ">
+                                <label for="fname ">Name</label>
+                                <input type="text " class="form-control " id="name" name="name" placeholder="Enter Your Name " required>
+                            </div>
+                            <div class="form-group ">
+                                <label for="pass1 ">Choose a password</label>
+                                <input type="password" class="form-control " id="pass1" name="pass1" placeholder="Choose Your Password " required>
+                            </div>
+                            <div class="form-group ">
+                                <label for="pass2 ">Confirm Password</label>
+                                <input type="password" class="form-control " id="pass2" name="pass2" placeholder="Enter your password again " required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-sm">Sign up</button>
+                            </div>
+                            <p><span style="color:blue;padding-left: 5px;" id="acount">Already have an account?</span><a href="/musicbeats/loginpage" style="text-decoration: none;color:tomato;margin-left: 5px;">Log in</a></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

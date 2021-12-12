@@ -1,0 +1,26 @@
+{% extends 'base.html' %}{% load static %}{% block title %}Songs{% endblock title %}{% block body %}
+<div class="container py-5">
+    <div class="row py-2">
+        {% for i in song %}
+        <div class="col-sm-4 mt-4">
+            <div class="card">
+                <img class="card-img-top" src="/media/{{i.image}}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title" style="color: green;font-weight: 500;">{{i.name}}</h5>
+                    {% if user.is_authenticated %}
+                    <div class="form-inline">
+                        <form action="/musicbeats/history" method="POST">{% csrf_token %}
+                            <input type="hidden" name="music_id" value="{{i.song_id}}">
+                            <a href="/musicbeats/songs/{{i.song_id}}"> <button class="btn btn-outline-danger btn-sm">Listen</button></a>
+                        </form>
+                    </div>
+                    {% else %}
+                    <a href="/musicbeats/songs/{{i.song_id}}" class="btn btn-outline-danger btn-sm">Listen</a> {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock body %}

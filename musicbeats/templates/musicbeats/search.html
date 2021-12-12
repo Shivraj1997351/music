@@ -1,0 +1,75 @@
+{% extends 'base.html' %}{% load static %}{% block title %}Search results{% endblock title %}{% block body %}
+<style>
+    .avatar {
+        vertical-align: middle;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    
+    @media (min-width: 250px) and (max-width: 767px) {
+        .mediadiv {
+            display: none;
+        }
+        .mediadiv1 {
+            display: block;
+            margin: auto;
+        }
+    }
+    
+    @media(min-width: 768px) {
+        .mediadiv {
+            display: block;
+        }
+        .mediadiv1 {
+            display: none;
+        }
+    }
+</style>
+<div class="container py-5">
+    {% if song %}
+    <h2 class="text-left">Songs</h2>
+    <div class="row py-2">
+        {% for i in song %}
+        <div class="col-sm-4 mt-4">
+            <div class="card">
+                <img class="card-img-top" src="/media/{{i.image}}" alt="Card image cap">
+                <div class="card-body">
+                    <p class="card-title" style="color: green;font-weight: 500;">{{i.name}}</p>
+                    {% if user.is_authenticated %}
+                    <form action="/musicbeats/history" method="POST">{% csrf_token %}
+                        <input type="hidden" name="music_id" value="{{i.song_id}}">
+                        <a href="/musicbeats/songs/{{i.song_id}}"> <button class="btn btn-outline-danger btn-sm">Listen</button></a>
+                    </form>
+                    {% else %}
+                    <a href="/musicbeats/songs/{{i.song_id}}" class="btn btn-outline-danger btn-sm">Listen</a> {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <hr> {% endif %} {% if singer %}
+    <h2 class="text-left">Singers</h2>
+    <div class="row py-2">
+        {% for s in singer %}
+        <div class="col-sm-4 mt-2">
+            <div class="mediadiv">
+                <div class="card-body text-center">
+                    <a style="text-decoration: none;" href="/musicbeats/singers/{{s.singer}}"><img src="/media/{{s.image}}" class="avatar"></a>
+                    <h3 class="pt-2">{{s.singer}}</h3>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="mediadiv1">
+            {% for s in singer %}
+
+            <div class="card-body text-center">
+                <a style="text-decoration: none;" href="/musicbeats/singers/{{s.singer}}"><img src="/media/{{s.image}}" class="avatar"></a>
+                <h3 class="pt-2">{{s.singer}}</h3>
+            </div>
+
+            {% endfor %}
+        </div>
+    </div>{% endif %} {% endblock body %}
